@@ -1,0 +1,584 @@
+{% load static %}
+
+{% include 'inc/head.inc.html' %}
+{% include 'inc/navbar.inc.html' %}
+
+<body>
+  <br>
+  <br>
+  {% if not total_initial_persons >= 15 %}
+  <div class="row">
+      <div class="col-sm-12 d-flex justify-content-center">
+        <div>
+          <div class="d-flex">
+            <input class="form-control" style="width: 300px;" id="copy_input" type="text">
+            <button type="button" id="copy_btn" title="Copied to clipboard" class="mx-2 btn btn-info" onclick="myFunction()" onmouseup="outFunc()">
+              Copy
+              
+            </button>
+            
+          </div>
+          <p class="text-success mt-2" id="msg"></p>
+        </div>
+          
+          
+      </div>
+  </div>
+  {% endif %}
+
+  {% if not all_added %}
+
+  <!-- tree form -->
+  <div id="myTree" class="text-center" style="margin: auto;">
+
+    <!-- WATER LEVEL -->
+    <button type="button" class="btn btn-info" onclick="save_tree()">SAVE FIRST FLOWER</button>
+    <br>
+    <br>
+
+    <div class="row">
+      <div class="col-sm-12 py-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="waterimg" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name="">
+            <option value="">Water person</option>
+            {% for person in all_persons %}
+            <option value="waterimg_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        
+      </div>
+    </div>
+
+    <!-- EARTH level -->
+
+    <div class="row">
+      <div class="col-sm-6 py-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="earthimg1" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Earth person1</option>
+            {% for person in all_persons %}
+            <option value="earthimg1_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6 py-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="earthimg2" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Earth person2</option>
+            {% for person in all_persons %}
+            <option value="earthimg2_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- AIR level -->
+
+    <div class="row">
+      <div class="col-sm-3 pt-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="airimg1" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Air person1</option>
+            {% for person in all_persons %}
+            <option value="airimg1_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- fire level -->
+
+        <div class="row mt-4 border border-secondary border-left-0 border-right-0">
+          <div class="col-sm-6 py-4">
+            <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg1" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person1</option>
+                {% for person in all_persons %}
+                <option value="fireimg1_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 py-4">
+             <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg2" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person2</option>
+                {% for person in all_persons %}
+                <option value="fireimg2_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        
+        </div>
+
+      </div>
+      <div class="col-sm-3 pt-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="airimg2" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Air person2</option>
+            {% for person in all_persons %}
+            <option value="airimg2_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- fire level -->
+
+        <div class="row mt-4 border border-secondary border-left-0 border-right-0">
+          <div class="col-sm-6 py-4">
+            <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg3" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person3</option>
+                {% for person in all_persons %}
+                <option value="fireimg3_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 py-4">
+             <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg4" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person4</option>
+                {% for person in all_persons %}
+                <option value="fireimg4_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        
+        </div>
+
+      </div>
+      <div class="col-sm-3 pt-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="airimg3" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Air person3</option>
+            {% for person in all_persons %}
+            <option value="airimg3_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- fire level -->
+        <div class="row mt-4 border border-secondary border-left-0 border-right-0">
+          <div class="col-sm-6 py-4">
+            <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg5" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person5</option>
+                {% for person in all_persons %}
+                <option value="fireimg5_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 py-4">
+             <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg6" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person6</option>
+                {% for person in all_persons %}
+                <option value="fireimg6_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+      <div class="col-sm-3 pt-4 border border-secondary">
+        <div class="form-tree-pic" class="form-tree-pic">
+          <img src="" id="airimg4" alt="">
+        </div>
+
+        <div class="form-group my-2" style="width: 140px; margin: auto;">
+          <select class="form-control" name=""  >
+            <option value="">Air person4</option>
+            {% for person in all_persons %}
+            <option value="airimg4_{{person.registered_user.id}}">
+             
+                {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+             
+              
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- fire level -->
+        <div class="row mt-4 border border-secondary border-left-0 border-right-0">
+          <div class="col-sm-6 py-4">
+            <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg7" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person7</option>
+                {% for person in all_persons %}
+                <option value="fireimg7_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="col-sm-6 py-4">
+             <div class="form-tree-pic" class="form-tree-pic">
+              <img src="" id="fireimg8" alt="">
+            </div>
+    
+            <div class="form-group my-2" style="width: 140px; margin: auto;">
+              <select class="form-control" name=""  >
+                <option value="">Fire person8</option>
+                {% for person in all_persons %}
+                <option value="fireimg8_{{person.registered_user.id}}">
+                 
+                    {{person.registered_user.first_name}} {{person.registered_user.last_name}}
+                 
+                  
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        
+        </div>
+      </div>
+    </div>
+
+    
+
+  </div>
+ 
+  
+  <div class="container">
+    {% if total_initial_persons == 15 %}
+       <h5 class="my-5">All initial 15 members are registered, Kindly make first flower by youself.</h5>
+    {% endif %}
+    <div class="row">
+      {% for person in all_persons %}
+      <div class="col-sm-4 p-3">
+        <div style="border-radius: 10px; border: solid 1px grey; text-align: center;">
+          <img class="my-4" id="{{person.registered_user.id}}" src="media/photos/{{person.registered_user.email}}" style="width: 150px; height: 150px; border-radius:100%;" alt="">
+        
+          <h4 class="mb-2">{{person.registered_user.first_name}} {{person.registered_user.last_name}}</h4>
+          <h6 class="mb-4">{{person.registered_user.username}}</h6>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% else %}
+      <div class="container">
+        <div class="alert alert-success" role="alert">
+          <h5>First initial Tree has been added!</h5>
+        </div>
+      </div>
+      
+      
+  {% endif %}
+  
+</body>
+
+</html>
+
+<script>
+  var origin = window.location.origin;
+  var link = origin+"/registration?inviteId="+'{{ code }}' ;
+  $("#copy_input").val(link);
+
+  function myFunction() {
+    var copyText = document.getElementById("copy_input");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    console.log(copyText);
+
+    $("#msg").text('Copied!');
+  }
+
+  var all_people_with_level = []
+
+  function already_present(person) {
+    for (let i = 0; i < all_people_with_level.length; i++) {
+      let element = all_people_with_level[i];
+      var targ = element[0]
+      if (person == element[1]) {
+
+        if (targ.search("water")!=-1) {
+          return "water";
+        }
+
+        if (targ.search("earth")!=-1) {
+          return "earth";
+        }
+
+        if (targ.search("air")!=-1) {
+          return "air";
+        }
+
+        if (targ.search("fire")!=-1) {
+          return "fire";
+        }
+
+      }
+      
+    }
+
+    return false;
+  }
+
+  function select_it(element, v) {
+    console.log(element);
+    console.log(v);
+    var mini_target = $(element).children();
+    console.log(mini_target);
+    
+    for (let i = 0; i < mini_target.length; i++) {
+      var element = mini_target[i];
+      if (element.value==v) {
+        console.log("yes");
+        console.log(element);
+      }
+      
+    }
+  }
+
+  function save_tree() {
+      if (all_people_with_level.length == 15) {
+        console.log(all_people_with_level);
+        var converted_data = JSON.stringify(all_people_with_level);
+        $.ajax({
+          url: "{% url 'add_first_tree' %}",
+          type: 'GET',
+          data: 'LIST='+converted_data,
+          success: (response)=>{
+            alert(response.message)
+        
+            if (response.status == 1) {
+                location.reload();
+            }
+          }
+        });
+
+      }else{
+        console.log(all_people_with_level.length);
+        alert("Kindly fill all the levels to add first TREE")
+      }
+  }
+
+
+  (function () {
+    var previous;
+
+    $("select").on('focus', function () {
+        // Store the current value on focus and on change
+        previous = this.value;
+    }).change(function() {
+        // Do something with the previous value after the change
+        // alert(previous);
+        var element = this;
+        var value = this.value;
+
+        if (value!="") {
+          var contain = value.split("_");
+          var to = contain[0]
+
+          var res = already_present(contain[1]);
+          
+          if (res) {
+            alert("This person is already present in "+res+" level")
+            // console.log(value);
+            // $(element).data('lastSelected').attr("selected", true);
+            // element.value = value;
+            // $(element+` option[value=${value}]`).attr("selected", true);
+            $(element).val(previous)
+        
+
+          }else{
+            var from = document.getElementById(contain[1]).src;
+            var target =  $("#"+to);
+            target.prop('src', from);
+            target.css({
+              'width': '100px',
+              'height': '100px',
+              'border-radius': '100%'
+            });
+
+            all_people_with_level.push([contain[0], contain[1]]);
+            console.log(all_people_with_level);
+          }
+
+        }
+    
+  
+
+
+
+
+        // Make sure the previous value is updated
+        previous = this.value;
+    });
+
+  })();
+
+
+  function move_pic(element, value) {
+    if (value!="") {
+      var contain = value.split("_");
+      var to = contain[0]
+
+      var res = already_present(contain[1]);
+      
+      if (res) {
+        alert("This person is already present in "+res+" level")
+        // console.log(value);
+        // $(element).data('lastSelected').attr("selected", true);
+        // element.value = value;
+        // $(element+` option[value=${value}]`).attr("selected", true);
+        // $(element).val(value)
+        select_it(element, value);
+
+      }else{
+        var from = document.getElementById(contain[1]).src;
+        var target =  $("#"+to);
+        target.prop('src', from);
+        target.css({
+          'width': '100px',
+          'height': '100px',
+          'border-radius': '100%'
+        });
+
+        all_people_with_level.push([contain[0], contain[1]]);
+        console.log(all_people_with_level);
+      }
+
+
+    
+    
+    }
+    
+  }
+
+
+
+</script>

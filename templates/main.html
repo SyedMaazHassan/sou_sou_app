@@ -4,6 +4,307 @@
 {% include 'inc/navbar.inc.html' %}
 
 <body>
+    <div class="container">
+        <br>
+        <br>
+        <div class="row">
+            <div class="col-sm-12 d-flex align-items-center justify-content-center">
+                <div id="profile_section" class="{% if not is_out %}collapse{% endif %}">
+                    <div class="profile">
+                        <img class="my-3" src="media/photos/{{info.which_user.email}}" style="width: 100px; height:100px; border-radius: 100%;" alt="">
+                        <h4>{{info.which_user.first_name}} {{info.which_user.last_name}}</h4>
+                        <p>{{info.which_user.username}}</p>
+    
+                        <div class="row my-3 text-info profile mx-5 p-3">
+                            <div class="col-sm-6">
+                                <h4>Balance</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4 id="user_points">{{info.points}}</h4>
+                            </div>
+                        </div>
+
+                        <div class="row my-3 text-info profile mx-5 p-3">
+                            <div class="col-sm-6">
+                                <h4>Level</h4>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4>{{myPosition}}</h4>
+                            </div>
+                        </div>
+
+                        {% ifequal myPosition 'fire' %}
+
+                            {% if is_to_pay %}
+                            <div class="row my-3 text-info mx-5" id="gift_btn">
+                                <button type="button" class="btn btn-lg btn-block btn-info" onclick="send_gift('{{root_id}}')">Send gift</button>
+                            </div>
+                            {% else %}
+                            <div class="row my-3 text-info mx-5">
+                                <div class="alert alert-success" style="width: 100%;" role="alert">
+                                    Gift has been sent!
+                                </div>
+                            </div>
+
+                            {% endif %}
+                        {% endifequal %}
+
+                        
+
+                        {% ifequal myPosition 'water' %}
+                            {% if total_gifts_collected >= 8 %}
+                            <div class="row my-3 text-info mx-5">
+                                <button type="button" class="btn btn-lg btn-block btn-info" onclick="collect_now('{{root_id}}')">Collect Now</button>
+                            </div>
+
+                            <script>
+                                function collect_now(root_id) {
+                                    $.ajax({
+                                        url: "{% url 'collect_points' %}",
+                                        type: 'GET',
+                                        data: `root_id=${root_id}`,
+                                        success: (response)=>{
+                                            if (response.status == 1) {
+                                                alert(response.msg)
+                                                location.reload()
+                                            }
+                                            
+                                        }
+                                    })
+                                }
+                            </script>
+
+                            {% endif %}
+                            <div class="row my-3 text-info mx-5">
+                                <div class="alert alert-success" style="width: 100%;" role="alert">
+                                    Total <strong>{{total_gifts_collected}} gift(s) </strong>has been received!
+                                </div>
+                            </div>
+
+                            
+
+                        {% endifequal %}
+
+                        <div class="row my-3 text-info mx-5" id="gift_msg" style="display: none;">
+                            <div class="alert alert-success" style="width: 100%;" role="alert">
+                                Gift has been sent!
+                            </div>
+                        </div>
+
+
+                        
+
+                        
+    
+                    </div>
+                    <br>
+                    {% if to_show %}
+                    <div class="row">
+                        <div class="col-sm-12 d-flex justify-content-center">
+                          <div>
+                            <div class="d-flex">
+                              <input class="form-control" style="width: 300px;" id="copy_input" type="text">
+                              <button type="button" id="copy_btn" title="Copied to clipboard" class="mx-2 btn btn-info" onclick="myFunction()" onmouseup="outFunc()">
+                                Copy
+                                
+                              </button>
+                              
+                            </div>
+                            <p class="text-success mt-2" id="msg"></p>
+                          </div>
+                            
+                            
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+            </div>
+
+            {% if not is_out %}
+            <div class="col-sm-12 py-4">
+                <div id="myDiagramDiv" style="width:100%; height:750px; background-color: white; border: solid 1px grey; border-radius: 7px;">
+        
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
   
 </body>
 </html>
+
+<script>
+
+    
+
+//   console.log(DATA);
+
+
+  var origin = window.location.origin;
+  var link = origin+"/registration?inviteId="+'{{ code }}' ;
+  $("#copy_input").val(link);
+
+  function myFunction() {
+    var copyText = document.getElementById("copy_input");
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    console.log(copyText);
+
+    $("#msg").text('Copied!');
+  }
+
+
+
+
+  
+    var $ = go.GraphObject.make;
+
+    var myDiagram =
+    $(go.Diagram, "myDiagramDiv",
+        {
+        "undoManager.isEnabled": true,
+        layout: $(go.TreeLayout,
+                    { angle: 90, layerSpacing: 100 })
+        },
+        {
+        initialDocumentSpot: go.Spot.Top,
+        initialViewportSpot: go.Spot.Top
+        }
+    );
+
+    // the template we defined earlier
+    myDiagram.nodeTemplate =
+    $(go.Node, "Horizontal",
+        { background: "#000000"},
+
+
+        $(go.Picture,
+        { margin: 10, width: 50, height: 50, background: "#000000"},
+        new go.Binding("source", "level")
+        ),
+
+        $(go.Picture,
+        { margin: 10, width: 50, height: 50, background: "#000000"},
+        new go.Binding("source", "person")
+        ),
+
+
+        $(go.TextBlock, "Default Text",
+        { margin: 8, stroke: "#ffffff", font: "16px sans-serif" },
+        new go.Binding("text", "name"),
+        
+        
+        ),
+        $(go.Panel, "Spot",
+        new go.Binding("opacity", "ribbon", function(t) { return t ? 1 : 0; }),
+        // note that the opacity defaults to zero (not visible),
+        // in case there is no "ribbon" property
+        { opacity: 0,
+          alignment: new go.Spot(1, 0, 5, -5),
+          alignmentFocus: go.Spot.TopRight },
+        $(go.Shape,  // the ribbon itself
+          { geometryString: "F1 M0 0 L30 0 70 40 70 70z",
+            fill: "blue", stroke: null, strokeWidth: 0 }),
+        $(go.TextBlock,
+          new go.Binding("text", "ribbon"),
+          { alignment: new go.Spot(1, 0, -29, 29),
+            angle: 45, maxSize: new go.Size(100, NaN),
+            stroke: "white", font: "bold 13px sans-serif", textAlign: "center" })
+      )
+      
+    );
+
+    // define a Link template that routes orthogonally, with no arrowhead
+    myDiagram.linkTemplate =
+    $(go.Link,
+        { routing: go.Link.Orthogonal, corner: 30 },
+        $(go.Shape, // the link's path shape
+        { strokeWidth: 2, stroke: "#cccccc" }));
+
+    var model = $(go.TreeModel);
+    model.nodeDataArray =
+    // [
+    //     { key: "1",              name: "Don Meowfd",   source: "cat1.jpg" },
+    //     { key: "2", parent: "1", name: "Demeter",    source: "cat2.png" },
+    //     { key: "3", parent: "1", name: "Copricat",   source: "cat3.png" },
+    //     { key: "4", parent: "3", name: "Jellylorum", source: "cat4.png" },
+    //     { key: "5", parent: "3", name: "Alonzo",     source: "cat5.png" },
+    //     { key: "6", parent: "3", name: "Munkustrap", source: "cat6.png" },
+    
+    // ];
+    [
+        
+        
+        
+    ];
+
+    var empty = []
+
+    {% for row in TREE %}
+            
+            if ('{{row.parent.id}}'!="") {
+                if ('{{row.node.username}}'=='{{user.username}}') {
+                    empty.push(
+                        { key: "{{row.id}}", ribbon: "YOU", parent: "{{row.parent.id}}", name: "{{row.node.first_name}} {{row.node.last_name}}",    person: "media/photos/{{row.node.email}}", level:"{{row.level}}"}
+                    )
+                    
+                }else{
+                    empty.push(
+                        { key: "{{row.id}}", parent: "{{row.parent.id}}", name: "{{row.node.first_name}} {{row.node.last_name}}",    person: "media/photos/{{row.node.email}}", level:"{{row.level}}"}
+                    )
+
+                }
+
+                
+                
+            }else{
+                if ('{{row.node.username}}'=='{{user.username}}') {
+                    empty.push(
+                        { key: "{{row.id}}",ribbon: "YOU", name: "{{row.node.first_name}} {{row.node.last_name}}",    person: "media/photos/{{row.node.email}}", level:"{{row.level}}"}
+                    )
+                    
+                }else{
+                    empty.push(
+                        { key: "{{row.id}}",ribbon: "ROOT", name: "{{row.node.first_name}} {{row.node.last_name}}",    person: "media/photos/{{row.node.email}}", level:"{{row.level}}"}
+                    )
+                }
+                
+    
+            }
+            
+            // console.log()
+            // console.log('{{row.parent.id}}')
+
+    {% endfor %}
+
+    model.nodeDataArray = empty;
+
+    myDiagram.model = model;
+
+
+
+
+    function send_gift(root_id) {
+        $.ajax({
+            url: "{% url 'send_gifting' %}",
+            type: "GET", 
+            data: `root_id=${root_id}`,
+            success: function (response) {
+                if (response.status == 1) {
+                    $("#user_points").text(`${response.remaining_balance}.0`);
+                    $("#gift_btn").css('display', 'none');
+                    $("#gift_msg").css('display', 'block');
+
+                }else{
+                    alert(response.msg)
+                }
+            }
+        });
+    }
+    
+
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>

@@ -1,3 +1,4 @@
+{% load static %}
 {% include 'inc/head.inc.html' %}
 
 {% include 'inc/navbar.inc.html' %}
@@ -5,11 +6,23 @@
 <body style="background-color: #ffffff;">
     <div class="row" style="width: 100%;">
         <div class="col-12 d-flex justify-content-center align-items-center" style="min-height: 90vh">
+    
             <div class="my-form" id="mainDiv">
                 <h3 class="text-info">Registration</h3>
-                <form autocomplete="off" style="text-align:center; margin-top: 30px;" action="signup" method="POST" enctype="multipart/form-data">
+                <form autocomplete="off" style="text-align:center; margin-top: 20px;" action="makeAccount" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-  
+                    <div class="p-0 my-2" style="width:50%; margin:auto; text-align:center">
+                        <div>
+                            <img id="blah" onclick="upload_img();" style="width:164px; height:164px; margin:auto; cursor:pointer; border-radius: 100%;" src="{% static 'img/profile_icon.png' %}" alt="Card image">
+                        </div>
+                    
+                        <div style="height:0px; overflow:hidden">
+                            <input type="file" id="pic" onchange="readURL(this);" name="image" required>
+
+                        </div>
+
+                    </div>
+                    <input type="hidden" name="inviteId" id="inviteId" value="{{request.GET.inviteId}}">
                     <input class="field form-control" id="name" name="name" type="text" value="{{name}}" placeholder="First name" required>
                     <input class="field form-control" id="l_name" name="l_name" type="text" value="{{l_name}}" placeholder="Last name" required>
                     <input class="field form-control" id="email" name="email" type="email" value="{{email}}" placeholder="Email" required>
@@ -50,6 +63,38 @@
             'border-color', '#ed4337'
         );
     };
+
+    if ('{{inviteId}}'.trim()!="") {
+        $("#inviteId").val('{{inviteId}}');
+    }
+
+    function upload_img() {
+        $("#pic").click();
+    }
+
+    function readURL(input) {
+        nameFile = input.files[0].name.split(".");
+        nameFile = nameFile[nameFile.length-1];
+        console.log(nameFile);
+        if(nameFile=="jpg" || nameFile=="jpeg" || nameFile=="png"){
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+    
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(164)
+                        .height(164);
+                };
+    
+                reader.readAsDataURL(input.files[0]);
+            }
+        }else{
+            $("#mainDiv").load(location.href + " #mainDiv>*", "");
+            alert("Invalid file type!");
+        }
+        
+    }
 
 </script>
 
